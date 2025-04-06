@@ -6,6 +6,6 @@ It's recommended to put this into other partition from the DB, such as in /home.
 
 ```sh
 useradd -m -d /home/dumper -s /bin/bash dumper
-git clone https://github.com/domcloud/db-dumper /home/dumper/db-dumper
-bash /home/dumper/db-dumper/main.sh
+git clone https://github.com/domcloud/db-dumper /home/dumper/db
+bash /home/dumper/db/main.sh
 ```

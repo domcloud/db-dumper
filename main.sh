@@ -38,7 +38,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
     schema=$(cut -d. -f1 <<< "$table")
     tab=$(cut -d. -f2 <<< "$table")
     echo "    → Dumping $table"
-    (sudo -u postgres pg_dump -d "$db" -t "$table" --clean -f "$TMP_DIR/${schema}_${tab}.sql"; mv "$TMP_DIR/${schema}_${tab}.sql" $DB_DIR/) &
+    (sudo -u postgres pg_dump -d "$db" -t "$table" --clean -O -f "$TMP_DIR/${schema}_${tab}.sql"; mv "$TMP_DIR/${schema}_${tab}.sql" $DB_DIR/) &
   done
 
   # wait
