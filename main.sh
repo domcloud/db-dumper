@@ -8,7 +8,7 @@ TMPDIR=/tmp/db-dumper
 BASE_DIR="$SCRIPT_DIR/$TODAY"
 MAX_SIZE_MB=512
 RETENTION_DAYS=30
-MYSQL_PASS=$(grep -q '^pass=' /etc/webmin/mysql/config &>/dev/null | cut -d= -f2)
+MYSQL_PASS=$(grep '^pass=' /etc/webmin/mysql/config 2>/dev/null | cut -d= -f2)
 
 rm -rf "$BASE_DIR"
 mkdir -p "$BASE_DIR"
