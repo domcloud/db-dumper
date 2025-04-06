@@ -4,6 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 TODAY=$(date +%F)
+TMPDIR=/tmp
 BASE_DIR="$SCRIPT_DIR/$TODAY"
 MAX_SIZE_MB=1024
 RETENTION_DAYS=30
@@ -21,7 +22,7 @@ echo "[INFO] Starting PostgreSQL backup..."
 sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate = false;" | while read -r db; do
   echo "  → [$db]"
   DB_DIR="$BASE_DIR/pg-$db"
-  TMP_DIR="/tmp/pg-$db"
+  TMP_DIR="$TMPDIR/pg-$db"
   mkdir -p $DB_DIR $TMP_DIR
   chmod  postgres:postgres $TMP_DIR
 
