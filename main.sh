@@ -35,7 +35,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
 
   wait
   echo "    → Archiving $db"
-  tar -cf "$PG_DIR/${db}.tar" -C "$PG_DIR" "$db"
+  tar -cf "$BASE_DIR/${db}.tar" -C "$DB_DIR" "$db"
   rm -rf "$DB_DIR"
 done
 
