@@ -38,8 +38,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
     schema=$(cut -d. -f1 <<< "$table")
     tab=$(cut -d. -f2 <<< "$table")
     echo "    → Dumping $table"
-    (sudo -u postgres pg_dump -d "$db" -t "$table" --schema-only -f "$TMP_DIR/${schema}_${tab}.schema.sql"; mv "$TMP_DIR/${schema}_${tab}.schema.sql" $DB_DIR/) &
-    (sudo -u postgres pg_dump -d "$db" -t "$table" --data-only -f "$TMP_DIR/${schema}_${tab}.data.sql"; mv "$TMP_DIR/${schema}_${tab}.data.sql" $DB_DIR/) &
+    (sudo -u postgres pg_dump -d "$db" -t "$table" --clean -f "$TMP_DIR/${schema}_${tab}.sql"; mv "$TMP_DIR/${schema}_${tab}.sql" $DB_DIR/) &
   done
 
   # wait
@@ -70,8 +69,7 @@ mysql -u root --password="$MYSQL_PASS" -N -e "SHOW DATABASES;" | grep -Ev "^(mys
       AND data_length + index_length < ${MAX_SIZE_MB} * 1024 * 1024;
   " | while read -r table; do
     echo "    → Dumping $table"
-    mysqldump -u root --password="$MYSQL_PASS" --no-data "$db" "$table" > "$DB_DIR/${table}.schema.sql" &
-    mysqldump -u root --password="$MYSQL_PASS" --no-create-info --single-transaction "$db" "$table" > "$DB_DIR/${table}.data.sql" &
+    mysqldump -u root --password="$MYSQL_PASS" --single-transaction "$db" "$table" > "$DB_DIR/${table}.sql" &
   done
 
   # wait
