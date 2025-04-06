@@ -1,9 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
 TODAY=$(date +%F)
-BASE_DIR="./dp-$TODAY"
+BASE_DIR="$SCRIPT_DIR/$TODAY"
 MAX_SIZE_MB=1024
+RETENTION_DAYS=30
 
 rm -rf "$BASE_DIR"
 mkdir -p "$BASE_DIR"
@@ -73,3 +76,11 @@ done
 wait
 
 echo "[OK] MariaDB backup complete."
+
+########################################
+# 🧹 Cleanup: Delete Backups Older Than 30 Days
+########################################
+
+echo "[INFO] Cleaning up old backups..."
+find $SCRIPT_DIR -maxdepth 1 -type d -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]' -mtime +$RETENTION_DAYS -exec rm -rf {} \;
+echo "[OK] Old backups cleaned."
