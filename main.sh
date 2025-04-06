@@ -8,6 +8,7 @@ TMPDIR=/tmp/db-dumper
 BASE_DIR="$SCRIPT_DIR/$TODAY"
 MAX_SIZE_MB=512
 RETENTION_DAYS=30
+MYSQL_PASS=$(grep -q '^pass=' /etc/webmin/mysql/config &>/dev/null | cut -d= -f2)
 
 rm -rf "$BASE_DIR"
 mkdir -p "$BASE_DIR"
@@ -68,7 +69,7 @@ mysql -N -e "SHOW DATABASES;" | grep -Ev "^(mysql|information_schema|performance
       AND data_length + index_length < ${MAX_SIZE_MB} * 1024 * 1024;
   " | while read -r table; do
     echo "    → Dumping $table"
-    mysqldump --single-transaction "$db" "$table" > "$DB_DIR/${table}.sql" &
+    mysqldump -u root --password="$MYSQL_PASS" --single-transaction "$db" "$table" > "$DB_DIR/${table}.sql" &
   done
 
   wait
