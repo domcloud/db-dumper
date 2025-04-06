@@ -62,7 +62,7 @@ mysql -u root --password="$MYSQL_PASS" -N -e "SHOW DATABASES;" | grep -Ev "^(mys
   DB_DIR="$BASE_DIR/my-$db"
   mkdir -p "$DB_DIR"
 
-  mysql -N -e "
+  mysql -u root --password="$MYSQL_PASS" -N -e "
     SELECT table_name
     FROM information_schema.tables
     WHERE table_schema = '$db'
