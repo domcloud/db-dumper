@@ -4,9 +4,9 @@ set -euo pipefail
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 TODAY=$(date +%F)
-TMPDIR=/tmp
+TMPDIR=/tmp/db-dumper
 BASE_DIR="$SCRIPT_DIR/$TODAY"
-MAX_SIZE_MB=1024
+MAX_SIZE_MB=512
 RETENTION_DAYS=30
 
 rm -rf "$BASE_DIR"
@@ -23,8 +23,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
   echo "  → [$db]"
   DB_DIR="$BASE_DIR/pg-$db"
   TMP_DIR="$TMPDIR/pg-$db"
-  rm -rf $TMP_DIR
-  mkdir -p $DB_DIR $TMP_DIR
+  rm -rf $TMP_DIR; mkdir -p $DB_DIR $TMP_DIR
   chown -R postgres:postgres $TMP_DIR
   chmod -R 0700 $TMP_DIR
 
@@ -87,5 +86,6 @@ echo "[OK] MariaDB backup complete."
 ########################################
 
 echo "[INFO] Cleaning up old backups..."
+rm -rf $TMPDIR
 find $SCRIPT_DIR -maxdepth 1 -type d -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]' -mtime +$RETENTION_DAYS -exec rm -rf {} \;
 echo "[OK] Old backups cleaned."
