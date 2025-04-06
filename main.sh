@@ -5,6 +5,7 @@ TODAY=$(date +%F)
 BASE_DIR="./dp-$TODAY"
 MAX_SIZE_MB=1024
 
+rm -rf "$BASE_DIR"
 mkdir -p "$BASE_DIR"
 
 ########################################
@@ -35,7 +36,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
 
   wait
   echo "    → Archiving $db"
-  tar -cf "$BASE_DIR/${db}.tar" -C "$BASE_DIR" "pg-$db"
+  tar -cf "$DB_DIR.tar" -C "$BASE_DIR" "pg-$db"
   rm -rf "$DB_DIR"
 done
 
@@ -65,7 +66,7 @@ mysql -N -e "SHOW DATABASES;" | grep -Ev "^(mysql|information_schema|performance
 
   wait
   echo "    → Compressing $db"
-  tar -I zstd -cf "$BASE_DIR/${db}.tar.zst" -C "$BASE_DIR" "my-$db"
+  tar -I zstd -cf "$DB_DIR.tar.zst" -C "$BASE_DIR" "my-$db"
   rm -rf "$DB_DIR"
 done
 
