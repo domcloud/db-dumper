@@ -57,7 +57,7 @@ echo "[OK] PostgreSQL backup complete."
 
 echo "[INFO] Starting MariaDB backup..."
 
-mysql -N -e "SHOW DATABASES;" | grep -Ev "^(mysql|information_schema|performance_schema|sys)$" | while read -r db; do
+mysql -u root --password="$MYSQL_PASS" -N -e "SHOW DATABASES;" | grep -Ev "^(mysql|information_schema|performance_schema|sys)$" | while read -r db; do
   echo "  → [$db]"
   DB_DIR="$BASE_DIR/my-$db"
   mkdir -p "$DB_DIR"
