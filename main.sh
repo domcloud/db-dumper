@@ -38,12 +38,12 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
     schema=$(cut -d. -f1 <<< "$table")
     tab=$(cut -d. -f2 <<< "$table")
     echo "    → Dumping $table"
-    (sudo -u postgres pg_dump -Fc -d "$db" -t "$table" -f "$TMP_DIR/${schema}_${tab}.dump") &
+    sudo -u postgres pg_dump -Fc -d "$db" -t "$table" -f "$TMP_DIR/${schema}_${tab}.dump" &
   done
 
   wait
   mv $TMP_DIR/* $DB_DIR/ || true
-  rm -rf $TMP_DIR
+  # rm -rf $TMP_DIR
   # echo "    → Archiving $db"
   # tar -cf "$DB_DIR.tar" -C "$BASE_DIR" "pg-$db"
   # rm -rf "$DB_DIR"
