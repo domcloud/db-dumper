@@ -42,7 +42,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
   done
 
   wait
-  mv $TMP_DIR/* $DB_DIR/
+  mv $TMP_DIR/* $DB_DIR/ || true
   rm -rf $TMP_DIR
   # echo "    → Archiving $db"
   # tar -cf "$DB_DIR.tar" -C "$BASE_DIR" "pg-$db"
