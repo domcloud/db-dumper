@@ -23,8 +23,10 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
   echo "  → [$db]"
   DB_DIR="$BASE_DIR/pg-$db"
   TMP_DIR="$TMPDIR/pg-$db"
+  rm -rf $TMP_DIR
   mkdir -p $DB_DIR $TMP_DIR
-  chmod  postgres:postgres $TMP_DIR
+  chown -R postgres:postgres $TMP_DIR
+  chmod -R 0700 $TMP_DIR
 
   sudo -u postgres psql -d "$db" -Atc "
     SELECT n.nspname || '.' || c.relname
