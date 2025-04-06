@@ -21,8 +21,9 @@ echo "[INFO] Starting PostgreSQL backup..."
 sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate = false;" | while read -r db; do
   echo "  → [$db]"
   DB_DIR="$BASE_DIR/pg-$db"
-  mkdir -p $DB_DIR
-  chown -R postgres:root $DB_DIR
+  TMP_DIR="/tmp/pg-$db"
+  mkdir -p $DB_DIR $TMP_DIR
+  chmod  postgres:postgres $TMP_DIR
 
   sudo -u postgres psql -d "$db" -Atc "
     SELECT n.nspname || '.' || c.relname
@@ -34,10 +35,12 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
     schema=$(cut -d. -f1 <<< "$table")
     tab=$(cut -d. -f2 <<< "$table")
     echo "    → Dumping $table"
-    sudo -u postgres pg_dump -Fc -d "$db" -t "$table" -f "$DB_DIR/${schema}_${tab}.dump" &
+    (sudo -u postgres pg_dump -Fc -d "$db" -t "$table" -f "$TMP_DIR/${schema}_${tab}.dump") &
   done
 
-  # wait
+  wait
+  mv $TMP_DIR/* $DB_DIR/
+  rm -rf $TMP_DIR
   # echo "    → Archiving $db"
   # tar -cf "$DB_DIR.tar" -C "$BASE_DIR" "pg-$db"
   # rm -rf "$DB_DIR"
@@ -67,7 +70,7 @@ mysql -N -e "SHOW DATABASES;" | grep -Ev "^(mysql|information_schema|performance
     mysqldump --single-transaction "$db" "$table" > "$DB_DIR/${table}.sql" &
   done
 
-  # wait
+  wait
   # echo "    → Compressing $db"
   # tar -I zstd -cf "$DB_DIR.tar.zst" -C "$BASE_DIR" "my-$db"
   # rm -rf "$DB_DIR"
