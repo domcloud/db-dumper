@@ -34,10 +34,10 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
     sudo -u postgres pg_dump -Fc -d "$db" -t "$table" -f "$DB_DIR/${schema}_${tab}.dump" &
   done
 
-  wait
-  echo "    → Archiving $db"
-  tar -cf "$DB_DIR.tar" -C "$BASE_DIR" "pg-$db"
-  rm -rf "$DB_DIR"
+  # wait
+  # echo "    → Archiving $db"
+  # tar -cf "$DB_DIR.tar" -C "$BASE_DIR" "pg-$db"
+  # rm -rf "$DB_DIR"
 done
 
 wait
@@ -64,10 +64,12 @@ mysql -N -e "SHOW DATABASES;" | grep -Ev "^(mysql|information_schema|performance
     mysqldump --single-transaction "$db" "$table" > "$DB_DIR/${table}.sql" &
   done
 
-  wait
-  echo "    → Compressing $db"
-  tar -I zstd -cf "$DB_DIR.tar.zst" -C "$BASE_DIR" "my-$db"
-  rm -rf "$DB_DIR"
+  # wait
+  # echo "    → Compressing $db"
+  # tar -I zstd -cf "$DB_DIR.tar.zst" -C "$BASE_DIR" "my-$db"
+  # rm -rf "$DB_DIR"
 done
+
+wait
 
 echo "[OK] MariaDB backup complete."
