@@ -86,6 +86,5 @@ echo "[OK] MariaDB backup complete."
 ########################################
 
 echo "[INFO] Cleaning up old backups..."
-rm -rf $TMPDIR
 find $SCRIPT_DIR -maxdepth 1 -type d -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]' -mtime +$RETENTION_DAYS -exec rm -rf {} \;
 echo "[OK] Old backups cleaned."
