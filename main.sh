@@ -29,7 +29,7 @@ sudo -u postgres psql -Atc "SELECT datname FROM pg_database WHERE datistemplate 
   chmod -R 0700 $TMP_DIR
 
   sudo -u postgres psql -d "$db" -Atc "
-    SELECT n.nspname || '.' || c.relname
+    SELECT DISTINCT n.nspname || '.' || c.relname
     FROM pg_stat_user_tables s
     JOIN pg_class c ON c.relname = s.relname AND c.relkind = 'r'
     JOIN pg_namespace n ON n.oid = c.relnamespace
