@@ -15,7 +15,7 @@ then
 fi
 
 echo Bup version is $(bup --version)
-for dir in $(ls -d $SCRIPT_DIR/20*) | sort; do
+for dir in $(ls -d $SCRIPT_DIR/20* | sort); do
     # Extract date folder name
     date=$(basename "$dir")
     timestamp=$(date -d "$date" +%s)
