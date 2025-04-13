@@ -18,7 +18,7 @@ for dir in $(ls -d $SCRIPT_DIR/20*/); do
     if [ ! -f "$patch_file" ]; then
       # Create the patch file if it doesn't exist
       echo "Creating patch for $current_date to $next_date"
-      diff -u0r "$SCRIPT_DIR/$current_date" "$SCRIPT_DIR/$next_date" > "$patch_file"
+      diff -u0rN "$SCRIPT_DIR/$current_date" "$SCRIPT_DIR/$next_date" > "$patch_file"
       # restore later with
       # cp -a $next_date $current_date
       # patch -p0 -R --dry-run < $current_date.patch
