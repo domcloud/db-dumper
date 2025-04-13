@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 # Loop through all directories with dates (YYYY-MM-DD format)
-for dir in $(ls -d $SCRIPT_DIR/20*/); do
+for dir in $(ls -d $SCRIPT_DIR/20*/ | sort); do
   # Extract the date from the folder name
   current_date=$(basename "$dir")
   
@@ -18,7 +18,7 @@ for dir in $(ls -d $SCRIPT_DIR/20*/); do
     if [ ! -f "$patch_file" ]; then
       # Create the patch file if it doesn't exist
       echo "Creating patch for $current_date to $next_date"
-      diff -u0rN "$SCRIPT_DIR/$current_date" "$SCRIPT_DIR/$next_date" > "$patch_file"
+      diff -u0rN "$SCRIPT_DIR/$current_date" "$SCRIPT_DIR/$next_date" > "$patch_file" || true
       # restore later with
       # cp -a $next_date $current_date
       # patch -p0 -R --dry-run < $current_date.patch
