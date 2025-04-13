@@ -23,7 +23,9 @@ for dir in $(ls -d $SCRIPT_DIR/20*/); do
       # cp -a $next_date $current_date
       # patch -p0 -R --dry-run < $current_date.patch
     else
-      echo "Patch file $patch_file already exists, skipping."
+      echo "Patch file $patch_file already exists, skipping"
     fi
+  else
+      echo "Can't patch $current_date as $next_date not exist"
   fi
 done
