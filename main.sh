@@ -69,7 +69,7 @@ mysql -u root --password="$MYSQL_PASS" -N -e "SHOW DATABASES;" | grep -Ev "^(mys
       AND data_length + index_length < ${MAX_SIZE_MB} * 1024 * 1024;
   " | while read -r table; do
     echo "    → Dumping $table"
-    mysqldump -u root --password="$MYSQL_PASS" --single-transaction "$db" "$table" > "$DB_DIR/${table}.sql" &
+    mysqldump -u root --password="$MYSQL_PASS" --single-transaction --skip-dump-date "$db" "$table" > "$DB_DIR/${table}.sql" &
   done
 
   # wait
