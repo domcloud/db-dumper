@@ -2,7 +2,6 @@
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-BUP_REPO=~/bup_repo
 
 if ! command -v bup 2>&1 >/dev/null
 then
@@ -16,16 +15,13 @@ then
 fi
 
 echo Bup version is $(bup --version)
-
-mkdir -p ~/bup_repo
-cd ~/bup_repo
-bup init
-
-for dir in $SCRIPT_DIR/20*/; do
+for dir in $(ls -d $SCRIPT_DIR/20*) | sort; do
     # Extract date folder name
     date=$(basename "$dir")
+    timestamp=$(date -d "$date" +%s)
 
     # Create backup for each date directory
-    echo "Backing up $date"
-    bup split -n "$dir" && bup save -n "$HOME/bup_repo/$date"
+    echo "Indexing and saving backup for $date"
+    bup index "$dir"
+    bup save -n db -d "$timestamp" "$dir"
 done
