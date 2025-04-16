@@ -27,7 +27,7 @@ for dir in $(ls -d $SCRIPT_DIR/20*/ | sort); do
       echo "Patch file $patch_file already exists, skipping"
     fi
     if [ -f "$patch_file" ]; then
-      rm -rf "$SCRIPT_DIR/$next_date"
+      rm -rf "$SCRIPT_DIR/$current_date"
     fi
   else
       echo "Can't patch $current_date as $next_date not exist"
