@@ -8,7 +8,12 @@ TMPDIR=/tmp/db-dumper
 BASE_DIR="$SCRIPT_DIR/$TODAY"
 MAX_SIZE_MB=512
 RETENTION_DAYS=30
+RUN_PATCH=true
 MYSQL_PASS=$(grep '^pass=' /etc/webmin/mysql/config 2>/dev/null | cut -d= -f2)
+
+if [ -f "$SCRIPT_DIR/.env" ]; then
+  source .env
+fi
 
 rm -rf "$BASE_DIR"
 mkdir -p "$BASE_DIR"
@@ -89,3 +94,8 @@ echo "[OK] MariaDB backup complete."
 echo "[INFO] Cleaning up old backups..."
 find $SCRIPT_DIR -maxdepth 1 -type d -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]' -mtime +$RETENTION_DAYS -exec rm -rf {} \;
 echo "[OK] Old backups cleaned."
+
+if [ "$RUN_PATCH" = true ]; then
+  echo "[INFO] Running patch backups..."
+  bash patch.sh
+fi
