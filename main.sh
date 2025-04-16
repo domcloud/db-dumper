@@ -12,7 +12,7 @@ RUN_PATCH=true
 MYSQL_PASS=$(grep '^pass=' /etc/webmin/mysql/config 2>/dev/null | cut -d= -f2)
 
 if [ -f "$SCRIPT_DIR/.env" ]; then
-  source .env
+  source "$SCRIPT_DIR/.env"
 fi
 
 rm -rf "$BASE_DIR"
