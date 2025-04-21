@@ -97,5 +97,5 @@ echo "[OK] Old backups cleaned."
 
 if [ "$RUN_PATCH" = true ]; then
   echo "[INFO] Running patch backups..."
-  bash patch.sh
+  bash $SCRIPT_DIR/patch.sh
 fi
