@@ -3,8 +3,8 @@ set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
-TODAY=$(date +%F)
 TMPDIR=/tmp/db-dumper
+TODAY=$(date +%F)
 BASE_DIR="$SCRIPT_DIR/$TODAY"
 MAX_SIZE_MB=512
 RETENTION_DAYS=30
@@ -15,8 +15,15 @@ if [ -f "$SCRIPT_DIR/.env" ]; then
   source "$SCRIPT_DIR/.env"
 fi
 
-rm -rf "$BASE_DIR"
-mkdir -p "$BASE_DIR"
+echo "------------------"
+while [ -d "$BASE_DIR" ]; do
+  echo "Directory $BASE_DIR already exists, waiting until next day"
+  sleep 60
+  TODAY=$(date +%F)
+  BASE_DIR="$SCRIPT_DIR/$TODAY"
+done
+
+echo "Begin backup to $BASE_DIR"
 
 ########################################
 # 🔷 PostgreSQL Backup - Custom Format #
@@ -99,3 +106,5 @@ if [ "$RUN_PATCH" = true ]; then
   echo "[INFO] Running patch backups..."
   bash $SCRIPT_DIR/patch.sh
 fi
+
+echo "[OK] Finished in $SECONDS seconds"
