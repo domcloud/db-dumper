@@ -99,7 +99,7 @@ echo "[OK] MariaDB backup complete."
 ########################################
 
 echo "[INFO] Cleaning up old backups..."
-find $SCRIPT_DIR -maxdepth 1 -type d -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]' -mtime +$RETENTION_DAYS -exec rm -rf {} \;
+find $SCRIPT_DIR -maxdepth 1 -type f -name '20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]*' -mtime +$RETENTION_DAYS -exec rm -rf {} \;
 echo "[OK] Old backups cleaned."
 
 if [ "$RUN_PATCH" = true ]; then
